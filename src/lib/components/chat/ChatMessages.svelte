@@ -6,7 +6,7 @@
 	import { randomUUID } from "$lib/utils/randomUuid";
 	import type { Model } from "$lib/types/Model";
 	import type { LayoutData } from "../../../routes/$types";
-	import ChatIntroduction from "./ChatIntroduction.svelte";
+	import EtchedChatIntroduction from "./EtchedChatIntroduction.svelte";
 	import ChatMessage from "./ChatMessage.svelte";
 	import type { WebSearchUpdate } from "$lib/types/MessageUpdate";
 	import { browser } from "$app/environment";
@@ -58,7 +58,7 @@
 				on:vote
 			/>
 		{:else}
-			<ChatIntroduction {settings} {models} {currentModel} on:message />
+			<EtchedChatIntroduction on:message />
 		{/each}
 		{#if pending}
 			<ChatMessage
