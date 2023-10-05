@@ -152,48 +152,6 @@
 </svelte:head>
 
 <div
-	class="grid h-full w-screen grid-cols-1 grid-rows-[auto,1fr] overflow-hidden text-smd dark:text-gray-300 md:grid-cols-[280px,1fr] md:grid-rows-[1fr]"
->
-	<MobileNav
-		isOpen={isNavOpen}
-		on:toggle={(ev) => (isNavOpen = ev.detail)}
-		title={data.conversations.find((conv) => conv.id === $page.params.id)?.title}
-	>
-		<NavMenu
-			conversations={data.conversations}
-			user={data.user}
-			canLogin={data.user === undefined && data.requiresLogin}
-			bind:loginModalVisible
-			on:shareConversation={(ev) => shareConversation(ev.detail.id, ev.detail.title)}
-			on:deleteConversation={(ev) => deleteConversation(ev.detail)}
-			on:clickSettings={() => (isSettingsOpen = true)}
-			on:editConversationTitle={(ev) => editConversationTitle(ev.detail.id, ev.detail.title)}
-		/>
-	</MobileNav>
-	<nav class="grid max-h-screen grid-cols-1 grid-rows-[auto,1fr,auto] max-md:hidden">
-		<NavMenu
-			conversations={data.conversations}
-			user={data.user}
-			canLogin={data.user === undefined && data.requiresLogin}
-			bind:loginModalVisible
-			on:shareConversation={(ev) => shareConversation(ev.detail.id, ev.detail.title)}
-			on:deleteConversation={(ev) => deleteConversation(ev.detail)}
-			on:clickSettings={() => (isSettingsOpen = true)}
-			on:editConversationTitle={(ev) => editConversationTitle(ev.detail.id, ev.detail.title)}
-		/>
-	</nav>
-	{#if currentError}
-		<Toast message={currentError} />
-	{/if}
-	{#if isSettingsOpen}
-		<SettingsModal
-			on:close={() => (isSettingsOpen = false)}
-			settings={data.settings}
-			models={data.models}
-		/>
-	{/if}
-	{#if (requiresLogin && data.messagesBeforeLogin === 0) || loginModalVisible}
-		<LoginModal settings={data.settings} />
-	{/if}
+	class="grid h-full w-screen grid-cols-1 grid-rows-[auto,1fr] overflow-hidden text-smd dark:text-gray-300 md:grid-cols-[1fr,1fr] md:grid-rows-[1fr]">
 	<slot />
 </div>
