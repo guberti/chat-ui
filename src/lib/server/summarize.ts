@@ -1,5 +1,5 @@
 import { buildPrompt } from "$lib/buildPrompt";
-import { generateFromDefaultEndpoint } from "$lib/server/generateFromDefaultEndpoint";
+import { generateFromHFEndpoint } from "$lib/server/generateFromHFEndpoint";
 import { defaultModel } from "$lib/server/models";
 
 export async function summarize(prompt: string) {
@@ -22,7 +22,7 @@ Summary: "🐍 Python code debugging request"
 		model: defaultModel,
 	});
 
-	const generated_text = await generateFromDefaultEndpoint(summaryPrompt).catch((e) => {
+	const generated_text = await generateFromHFEndpoint(summaryPrompt).catch((e) => {
 		console.error(e);
 		return null;
 	});

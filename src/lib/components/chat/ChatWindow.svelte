@@ -12,9 +12,7 @@
 	import StopGeneratingBtn from "../StopGeneratingBtn.svelte";
 	import type { Model } from "$lib/types/Model";
 	import type { LayoutData } from "../../../routes/$types";
-	import WebSearchToggle from "../WebSearchToggle.svelte";
 	import LoginModal from "../LoginModal.svelte";
-	import type { WebSearchUpdate } from "$lib/types/MessageUpdate";
 
 	export let messages: Message[] = [];
 	export let loading = false;
@@ -61,7 +59,6 @@
 		isAuthor={!shared}
 		etched={true}
 		{webSearchMessages}
-		{preprompt}
 		on:message
 		on:vote
 		on:retry={(ev) => {
@@ -72,9 +69,6 @@
 		class="dark:via-gray-80 pointer-events-none absolute inset-x-0 bottom-0 z-0 mx-auto flex w-full max-w-3xl flex-col items-center justify-center bg-gradient-to-t from-white via-white/80 to-white/0 px-3.5 py-4 dark:border-gray-800 dark:from-gray-900 dark:to-gray-900/0 max-md:border-t max-md:bg-white max-md:dark:bg-gray-900 sm:px-5 md:py-8 xl:max-w-4xl [&>*]:pointer-events-auto"
 	>
 		<div class="flex w-full pb-3 max-md:justify-between">
-			{#if settings?.searchEnabled}
-				<WebSearchToggle />
-			{/if}
 			{#if loading}
 				<StopGeneratingBtn
 					classNames={settings?.searchEnabled ? "md:-translate-x-1/2 md:mx-auto" : "mx-auto"}
@@ -162,7 +156,6 @@
 		isAuthor={!shared}
 		etched={false}
 		{webSearchMessages}
-		{searches}
 		on:message
 		on:vote
 		on:retry={(ev) => {
@@ -173,9 +166,6 @@
 		class="dark:via-gray-80 pointer-events-none absolute inset-x-0 bottom-0 z-0 mx-auto flex w-full max-w-3xl flex-col items-center justify-center bg-gradient-to-t from-white via-white/80 to-white/0 px-3.5 py-4 dark:border-gray-800 dark:from-gray-900 dark:to-gray-900/0 max-md:border-t max-md:bg-white max-md:dark:bg-gray-900 sm:px-5 md:py-8 xl:max-w-4xl [&>*]:pointer-events-auto"
 	>
 		<div class="flex w-full pb-3 max-md:justify-between">
-			{#if settings?.searchEnabled}
-				<WebSearchToggle />
-			{/if}
 			{#if loading}
 				<StopGeneratingBtn
 					classNames={settings?.searchEnabled ? "md:-translate-x-1/2 md:mx-auto" : "mx-auto"}

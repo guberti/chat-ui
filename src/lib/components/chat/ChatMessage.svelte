@@ -10,7 +10,6 @@
 	import CopyToClipBoardBtn from "../CopyToClipBoardBtn.svelte";
 	import IconLoading from "../icons/IconLoading.svelte";
 	import CarbonRotate360 from "~icons/carbon/rotate-360";
-	import CarbonDownload from "~icons/carbon/download";
 	import CarbonThumbsUp from "~icons/carbon/thumbs-up";
 	import CarbonThumbsDown from "~icons/carbon/thumbs-down";
 	import { PUBLIC_SEP_TOKEN } from "$lib/constants/publicSepToken";
@@ -101,15 +100,6 @@
 		}
 	});
 
-	let searchUpdates: WebSearchUpdate[] = [];
-
-	$: searchUpdates = ((webSearchMessages.length > 0
-		? webSearchMessages
-		: message.updates?.filter(({ type }) => type === "webSearch")) ?? []) as WebSearchUpdate[];
-
-	$: downloadLink =
-		message.from === "user" ? `${$page.url.pathname}/message/${message.id}/prompt` : undefined;
-	
 	$: if (isCopied) {
 		setTimeout(() => {
 			isCopied = false;
@@ -144,26 +134,6 @@
 					{/if}
 				{/each}
 			</div>
-			<!-- Web Search sources -->
-			{#if webSearchSources?.length}
-				<div class="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm">
-					<div class="text-gray-400">Sources:</div>
-					{#each webSearchSources as { link, title, hostname }}
-						<a
-							class="flex items-center gap-2 whitespace-nowrap rounded-lg border bg-white px-2 py-1.5 leading-none hover:border-gray-300 dark:border-gray-800 dark:bg-gray-900 dark:hover:border-gray-700"
-							href={link}
-							target="_blank"
-						>
-							<img
-								class="h-3.5 w-3.5 rounded"
-								src="https://www.google.com/s2/favicons?sz=64&domain_url={hostname}"
-								alt="{title} favicon"
-							/>
-							<div>{hostname.replace(/^www\./, "")}</div>
-						</a>
-					{/each}
-				</div>
-			{/if}
 		</div>
 		{#if isAuthor && !loading && message.content}
 			<div
@@ -216,17 +186,6 @@
 		</div>
 		{#if !loading}
 			<div class="absolute right-0 top-3.5 flex gap-2 lg:-right-2">
-				{#if downloadLink}
-					<a
-						class="rounded-lg border border-gray-100 p-1 text-xs text-gray-400 group-hover:block hover:text-gray-500 dark:border-gray-800 dark:text-gray-400 dark:hover:text-gray-300 md:hidden"
-						title="Download prompt and parameters"
-						type="button"
-						target="_blank"
-						href={downloadLink}
-					>
-						<CarbonDownload />
-					</a>
-				{/if}
 				{#if !readOnly}
 					<button
 						class="cursor-pointer rounded-lg border border-gray-100 p-1 text-xs text-gray-400 group-hover:block hover:text-gray-500 dark:border-gray-800 dark:text-gray-400 dark:hover:text-gray-300 md:hidden lg:-right-2"

@@ -15,8 +15,6 @@ import { ObjectId } from "mongodb";
 import { z } from "zod";
 import { AwsClient } from "aws4fetch";
 import type { MessageUpdate } from "$lib/types/MessageUpdate";
-import { runWebSearch } from "$lib/server/websearch/runWebSearch";
-import type { WebSearch } from "$lib/types/WebSearch";
 import { abortedGenerations } from "$lib/server/abortedGenerations";
 import { summarize } from "$lib/server/summarize";
 
@@ -143,17 +141,10 @@ export async function POST({ request, fetch, locals, params, getClientAddress })
 
 			update({ type: "status", status: "started" });
 
-			let webSearchResults: WebSearch | undefined;
-
-			if (webSearch) {
-				webSearchResults = await runWebSearch(conv, newPrompt, update);
-			}
-
 			// we can now build the prompt using the messages
 			const prompt = await buildPrompt({
 				messages,
 				model,
-				webSearch: webSearchResults,
 				preprompt: conv.preprompt ?? model.preprompt,
 				locals: locals,
 			});
@@ -257,7 +248,6 @@ export async function POST({ request, fetch, locals, params, getClientAddress })
 								{
 									from: "assistant",
 									content: output.token.text.trimStart(),
-									webSearch: webSearchResults,
 									updates: updates,
 									id: (responseId as Message["id"]) || crypto.randomUUID(),
 									createdAt: new Date(),
