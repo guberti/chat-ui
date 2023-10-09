@@ -17,7 +17,9 @@
 
 	export let data;
 
-	let messages = data.messages;
+	let etchedMessages = data.messages;
+	let hfMessages = data.messages;
+
 	let lastLoadedMessages = data.messages;
 	let isAborted = false;
 
@@ -25,7 +27,8 @@
 
 	// Since we modify the messages array locally, we don't want to reset it if an old version is passed
 	$: if (data.messages !== lastLoadedMessages) {
-		messages = data.messages;
+		etchedMessages = data.messages;
+		hfMessages = data.messages;
 		lastLoadedMessages = data.messages;
 	}
 
@@ -72,17 +75,13 @@
 			pending = true;
 
 			// first we check if the messageId already exists, indicating a retry
-
-			let retryMessageIndex = messages.findIndex((msg) => msg.id === messageId);
-			const isRetry = retryMessageIndex !== -1;
-			// if it's not a retry we just use the whole array
-			if (!isRetry) {
-				retryMessageIndex = messages.length;
-			}
-
 			// slice up to the point of the retry
-			messages = [
-				...messages.slice(0, retryMessageIndex),
+			etchedMessages = [
+				...etchedMessages.slice(0, etchedMessages.length),
+				{ from: "user", content: message, id: messageId },
+			];
+			hfMessages = [
+				...hfMessages.slice(0, hfMessages.length),
 				{ from: "user", content: message, id: messageId },
 			];
 
@@ -95,7 +94,7 @@
 					inputs: message,
 					id: messageId,
 					response_id: responseId,
-					is_retry: isRetry,
+					is_retry: false,
 					web_search: $webSearchParameters.useSearch,
 				}),
 			});
@@ -148,16 +147,28 @@
 							} else if (update.type === "stream") {
 								pending = false;
 
-								let lastMessage = messages[messages.length - 1];
-
-								if (lastMessage.from !== "assistant") {
-									messages = [
-										...messages,
+								let hfLastMessage = hfMessages[hfMessages.length - 1];
+								if (hfLastMessage.from !== "assistant") {
+									hfMessages = [
+										...hfMessages,
 										{ from: "assistant", id: randomUUID(), content: update.token },
 									];
 								} else {
-									lastMessage.content += update.token;
-									messages = [...messages];
+									hfLastMessage.content += update.token;
+									hfMessages = [...hfMessages];
+
+								}
+							} else if (update.type === "fakeStream") {
+								let etchedLastMessage = etchedMessages[etchedMessages.length - 1];
+
+								if (etchedLastMessage.from !== "assistant") {
+									etchedMessages = [
+										...etchedMessages,
+										{ from: "assistant", id: randomUUID(), content: update.token },
+									];
+								} else {
+									etchedLastMessage.content += update.token;
+									etchedMessages = [...etchedMessages];
 								}
 							} else if (update.type === "webSearch") {
 								webSearchMessages = [...webSearchMessages, update];
@@ -253,11 +264,6 @@
 	$: $page.params.id, (isAborted = true);
 	$: title = data.conversations.find((conv) => conv.id === $page.params.id)?.title ?? data.title;
 
-	$: loginRequired =
-		(data.requiresLogin
-			? !data.user
-			: !data.settings.ethicsModalAcceptedAt && !!PUBLIC_APP_DISCLAIMER) &&
-		messages.length >= data.messagesBeforeLogin;
 </script>
 
 <svelte:head>
@@ -273,7 +279,8 @@
 <ChatWindow
 	{loading}
 	{pending}
-	{messages}
+	etchedMessages={etchedMessages}
+	hfMessages={hfMessages}
 	shared={data.shared}
 	preprompt={data.preprompt}
 	bind:webSearchMessages

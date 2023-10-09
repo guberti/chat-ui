@@ -14,7 +14,9 @@
 	import type { LayoutData } from "../../../routes/$types";
 	import LoginModal from "../LoginModal.svelte";
 
-	export let messages: Message[] = [];
+	export let etchedMessages: Message[] = [];
+	export let hfMessages: Message[] = [];
+
 	export let loading = false;
 	export let pending = false;
 	export let shared = false;
@@ -54,7 +56,7 @@
 		{settings}
 		{currentModel}
 		{models}
-		{messages}
+		messages={etchedMessages}
 		readOnly={isReadOnly}
 		isAuthor={!shared}
 		etched={true}
@@ -126,7 +128,7 @@
 				> <span class="max-sm:hidden">·</span><br class="sm:hidden" /> Generated content may be inaccurate
 				or false.
 			</p>
-			{#if messages.length}
+			{#if etchedMessages.length}
 				<button
 					class="flex flex-none items-center hover:text-gray-400 hover:underline max-sm:rounded-lg max-sm:bg-gray-50 max-sm:px-2.5 dark:max-sm:bg-gray-800"
 					type="button"
@@ -151,7 +153,7 @@
 		{settings}
 		{currentModel}
 		{models}
-		{messages}
+		messages={hfMessages}
 		readOnly={isReadOnly}
 		isAuthor={!shared}
 		etched={false}
@@ -223,7 +225,7 @@
 				> <span class="max-sm:hidden">·</span><br class="sm:hidden" /> Generated content may be inaccurate
 				or false.
 			</p>
-			{#if messages.length}
+			{#if hfMessages.length}
 				<button
 					class="flex flex-none items-center hover:text-gray-400 hover:underline max-sm:rounded-lg max-sm:bg-gray-50 max-sm:px-2.5 dark:max-sm:bg-gray-800"
 					type="button"
