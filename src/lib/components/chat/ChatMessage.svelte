@@ -16,9 +16,6 @@
 	import { PUBLIC_SEP_TOKEN } from "$lib/constants/publicSepToken";
 	import type { Model } from "$lib/types/Model";
 
-	import OpenWebSearchResults from "../OpenWebSearchResults.svelte";
-	import type { WebSearchUpdate } from "$lib/types/MessageUpdate";
-
 	function sanitizeMd(md: string) {
 		let ret = md
 			.replace(/<\|[a-z]*$/, "")
@@ -48,8 +45,6 @@
 	export let isAuthor = true;
 	export let readOnly = false;
 	export let isTapped = false;
-
-	export let webSearchMessages: WebSearchUpdate[];
 
 	const dispatch = createEventDispatcher<{
 		retry: { content: string; id: Message["id"] };
@@ -114,16 +109,7 @@
 
 	$: downloadLink =
 		message.from === "user" ? `${$page.url.pathname}/message/${message.id}/prompt` : undefined;
-
-	let webSearchIsDone = true;
-
-	$: webSearchIsDone =
-		searchUpdates.length > 0 && searchUpdates[searchUpdates.length - 1].messageType === "sources";
-
-	$: webSearchSources =
-		searchUpdates &&
-		searchUpdates?.filter(({ messageType }) => messageType === "sources")?.[0]?.sources;
-
+	
 	$: if (isCopied) {
 		setTimeout(() => {
 			isCopied = false;
@@ -145,17 +131,6 @@
 		<div
 			class="relative min-h-[calc(2rem+theme(spacing[3.5])*2)] min-w-[60px] break-words rounded-2xl border border-gray-100 bg-gradient-to-br from-gray-50 px-5 py-3.5 text-gray-600 prose-pre:my-2 dark:border-gray-800 dark:from-gray-800/40 dark:text-gray-300"
 		>
-			{#if searchUpdates && searchUpdates.length > 0}
-				<OpenWebSearchResults
-					classNames={tokens.length ? "mb-3.5" : ""}
-					webSearchMessages={searchUpdates}
-					loading={!(searchUpdates[searchUpdates.length - 1]?.messageType === "sources")}
-				/>
-			{/if}
-			{#if !message.content && (webSearchIsDone || (webSearchMessages && webSearchMessages.length === 0))}
-				<IconLoading />
-			{/if}
-
 			<div
 				class="prose max-w-none dark:prose-invert max-sm:prose-sm prose-headings:font-semibold prose-h1:text-lg prose-h2:text-base prose-h3:text-base prose-pre:bg-gray-800 dark:prose-pre:bg-gray-900"
 				bind:this={contentEl}

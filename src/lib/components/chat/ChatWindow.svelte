@@ -59,6 +59,7 @@
 		{messages}
 		readOnly={isReadOnly}
 		isAuthor={!shared}
+		etched={true}
 		{webSearchMessages}
 		{preprompt}
 		on:message
@@ -159,6 +160,7 @@
 		{messages}
 		readOnly={isReadOnly}
 		isAuthor={!shared}
+		etched={false}
 		{webSearchMessages}
 		{searches}
 		on:message

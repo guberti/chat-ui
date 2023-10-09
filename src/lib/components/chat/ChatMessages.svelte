@@ -7,6 +7,8 @@
 	import type { Model } from "$lib/types/Model";
 	import type { LayoutData } from "../../../routes/$types";
 	import EtchedChatIntroduction from "./EtchedChatIntroduction.svelte";
+	import APIChatIntroduction from "./APIChatIntroduction.svelte";
+
 	import ChatMessage from "./ChatMessage.svelte";
 	import type { WebSearchUpdate } from "$lib/types/MessageUpdate";
 	import { browser } from "$app/environment";
@@ -15,6 +17,7 @@
 	export let messages: Message[];
 	export let loading: boolean;
 	export let pending: boolean;
+	export let etched: boolean;
 	export let isAuthor: boolean;
 	export let currentModel: Model;
 	export let settings: LayoutData["settings"];
@@ -43,6 +46,11 @@
 	bind:this={chatContainer}
 >
 	<div class="mx-auto flex h-full max-w-3xl flex-col gap-6 px-5 pt-6 sm:gap-8 xl:max-w-4xl">
+		{#if etched}
+			<EtchedChatIntroduction on:message />
+		{:else}
+			<APIChatIntroduction on:message />
+		{/if}
 		{#each messages as message, i}
 			{#if i === 0 && preprompt}
 				<SystemPromptModal {preprompt} />
@@ -51,14 +59,12 @@
 				loading={loading && i === messages.length - 1}
 				{message}
 				{isAuthor}
-				{readOnly}
 				model={currentModel}
 				webSearchMessages={i === messages.length - 1 ? webSearchMessages : []}
 				on:retry
 				on:vote
 			/>
 		{:else}
-			<EtchedChatIntroduction on:message />
 		{/each}
 		{#if pending}
 			<ChatMessage
