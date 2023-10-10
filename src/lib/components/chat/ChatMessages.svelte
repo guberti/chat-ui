@@ -20,10 +20,7 @@
 	export let etched: boolean;
 	export let isAuthor: boolean;
 	export let currentModel: Model;
-	export let settings: LayoutData["settings"];
-	export let models: Model[];
 	export let preprompt: string | undefined;
-	export let readOnly: boolean;
 
 	let chatContainer: HTMLElement;
 
@@ -60,7 +57,6 @@
 				{message}
 				{isAuthor}
 				model={currentModel}
-				webSearchMessages={i === messages.length - 1 ? webSearchMessages : []}
 				on:retry
 				on:vote
 			/>
@@ -70,7 +66,6 @@
 			<ChatMessage
 				message={{ from: "assistant", content: "", id: randomUUID() }}
 				model={currentModel}
-				{webSearchMessages}
 			/>
 		{/if}
 		<div class="h-44 flex-none" />

@@ -53,11 +53,9 @@
 	<ChatMessages
 		{loading}
 		{pending}
-		{settings}
 		{currentModel}
-		{models}
+		{preprompt}
 		messages={etchedMessages}
-		readOnly={isReadOnly}
 		isAuthor={!shared}
 		etched={true}
 		{webSearchMessages}
@@ -150,11 +148,9 @@
 	<ChatMessages
 		{loading}
 		{pending}
-		{settings}
 		{currentModel}
-		{models}
+		{preprompt}
 		messages={hfMessages}
-		readOnly={isReadOnly}
 		isAuthor={!shared}
 		etched={false}
 		{webSearchMessages}

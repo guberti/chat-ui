@@ -1041,7 +1041,8 @@ const FIXED_ANSWER = [
 {"type":"fakeStream","token":"\n"},
 {"type":"fakeStream","token":"```"},
 {"type":"fakeStream","token":"\n"},
-{"type":"fakeStream","token":"Ex"},
+{"type":"fakeStream","token":"\n"},
+{"type":"fakeStream","token":"\n"},
 ];
 
 export async function POST({ request, fetch, locals, params, getClientAddress }) {
@@ -1187,13 +1188,13 @@ export async function POST({ request, fetch, locals, params, getClientAddress })
 				if (index < FIXED_ANSWER.length) {
 					controller.enqueue(JSON.stringify({
 						type: "fakeStream",
-						token: FIXED_ANSWER[index].token,
+						token: FIXED_ANSWER[index].token + FIXED_ANSWER[index + 1].token + FIXED_ANSWER[index + 2].token + FIXED_ANSWER[index + 3].token,
 					}) + "\n");
-					index += 1;
+					index += 4;
 				} else {
 					clearInterval(interval);
 				}
-			}, 10);
+			}, 25);
 
 
 			// fetch the endpoint

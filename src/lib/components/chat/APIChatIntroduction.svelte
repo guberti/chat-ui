@@ -11,8 +11,6 @@
 	import type { LayoutData } from "../../../routes/$types";
 	import { findCurrentModel } from "$lib/utils/models";
 
-	export let settings: LayoutData["settings"];
-
 	let isModelsModalOpen = false;
 
 	const announcementBanners = PUBLIC_ANNOUNCEMENT_BANNERS
