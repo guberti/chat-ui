@@ -1165,6 +1165,18 @@ export async function POST({ request, fetch, locals, params, getClientAddress })
 				}
 				controller.enqueue(JSON.stringify(newUpdate) + "\n");
 			}
+			let index = 0;
+			const interval = setInterval(() => {
+				if (index < FIXED_ANSWER.length) {
+					controller.enqueue(JSON.stringify({
+						type: "fakeStream",
+						token: FIXED_ANSWER[index].token + FIXED_ANSWER[index + 1].token + FIXED_ANSWER[index + 2].token + FIXED_ANSWER[index + 3].token,
+					}) + "\n");
+					index += 4;
+				} else {
+					clearInterval(interval);
+				}
+			}, 25);
 
 			update({ type: "status", status: "started" });
 
@@ -1182,19 +1194,6 @@ export async function POST({ request, fetch, locals, params, getClientAddress })
 					token: "dummy "
 				}) + "\n");
 			}, 10);*/
-
-			let index = 0;
-			const interval = setInterval(() => {
-				if (index < FIXED_ANSWER.length) {
-					controller.enqueue(JSON.stringify({
-						type: "fakeStream",
-						token: FIXED_ANSWER[index].token + FIXED_ANSWER[index + 1].token + FIXED_ANSWER[index + 2].token + FIXED_ANSWER[index + 3].token,
-					}) + "\n");
-					index += 4;
-				} else {
-					clearInterval(interval);
-				}
-			}, 25);
 
 
 			// fetch the endpoint
